@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.0.193', 'localhost', '127.0.0.1', 'nusachicken.netlify.app', 'www.nusachicken.netlify.app']
 
+CSRF_TRUSTED_ORIGINS = ['nusachicken.netlify.app', 'www.nusachicken.netlify.app']
+
 
 # Application definition
 
