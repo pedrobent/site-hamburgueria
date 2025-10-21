@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Cardápio</h2>
+        </div>
+    </div>
+
+    <!-- Lanches -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Lanches</h3>
+        </div>
+        {% for lanche in lanches %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container">
+                    {% if lanche.imagem %}
+                    <img src="{{ lanche.imagem.url }}" class="card-img-top" alt="{{ lanche.nome }}">
+                    {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ lanche.nome }}</h5>
+                    <p class="card-text">{{ lanche.descricao }}</p>
+                    <p class="card-text"><strong>Preço: R$ {{ lanche.preco }}</strong></p>
+                    <form method="post" action="{% url 'adicionar_ao_carrinho' lanche.id %}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantidade" value="1" min="1" class="form-control me-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Bebidas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Bebidas</h3>
+        </div>
+        {% for bebida in bebidas %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container">
+                    {% if bebida.imagem %}
+                    <img src="{{ bebida.imagem.url }}" class="card-img-top" alt="{{ bebida.nome }}">
+                    {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ bebida.nome }}</h5>
+                    <p class="card-text">{{ bebida.descricao }}</p>
+                    <p class="card-text"><strong>Preço: R$ {{ bebida.preco }}</strong></p>
+                    <form method="post" action="{% url 'adicionar_ao_carrinho' bebida.id %}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantidade" value="1" min="1" class="form-control me-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sobremesas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Sobremesas</h3>
+        </div>
+        {% for sobremesa in sobremesas %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container">
+                    {% if sobremesa.imagem %}
+                    <img src="{{ sobremesa.imagem.url }}" class="card-img-top" alt="{{ sobremesa.nome }}">
+                    {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ sobremesa.nome }}</h5>
+                    <p class="card-text">{{ sobremesa.descricao }}</p>
+                    <p class="card-text"><strong>Preço: R$ {{ sobremesa.preco }}</strong></p>
+                    <form method="post" action="{% url 'adicionar_ao_carrinho' sobremesa.id %}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantidade" value="1" min="1" class="form-control me-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Porções -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Porções</h3>
+        </div>
+        {% for porcao in porcoes %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container">
+                    {% if porcao.imagem %}
+                    <img src="{{ porcao.imagem.url }}" class="card-img-top" alt="{{ porcao.nome }}">
+                    {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ porcao.nome }}</h5>
+                    <p class="card-text">{{ porcao.descricao }}</p>
+                    <p class="card-text"><strong>Preço: R$ {{ porcao.preco }}</strong></p>
+                    <form method="post" action="{% url 'adicionar_ao_carrinho' porcao.id %}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantidade" value="1" min="1" class="form-control me-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Combos -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Combos</h3>
+        </div>
+        {% for combo in combos %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container">
+                    {% if combo.imagem %}
+                    <img src="{{ combo.imagem.url }}" class="card-img-top" alt="{{ combo.nome }}">
+                    {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ combo.nome }}</h5>
+                    <p class="card-text">{{ combo.descricao }}</p>
+                    <p class="card-text"><strong>Preço: R$ {{ combo.preco }}</strong></p>
+                    <form method="post" action="{% url 'adicionar_ao_carrinho' combo.id %}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantidade" value="1" min="1" class="form-control me-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pastéis -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Pastéis</h3>
+        </div>
+        {% for pastel in pasteis %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-container">
+                    {% if pastel.imagem %}
+                    <img src="{{ pastel.imagem.url }}" class="card-img-top" alt="{{ pastel.nome }}">
+                    {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ pastel.nome }}</h5>
+                    <p class="card-text">{{ pastel.descricao }}</p>
+                    <p class="card-text"><strong>Preço: R$ {{ pastel.preco }}</strong></p>
+                    <form method="post" action="{% url 'adicionar_ao_carrinho' pastel.id %}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantidade" value="1" min="1" class="form-control me-2" style="width: 80px;">
+                        <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Botão do Carrinho -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <a href="{% url 'ver_carrinho' %}" class="btn btn-success btn-lg">
+                Ver Carrinho
+                {% if request.session.carrinho %}
+                <span class="badge bg-light text-dark ms-2">
+                    {{ request.session.carrinho|length }}
+                </span>
+                {% endif %}
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    {% for message in messages %}
+    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header {% if message.tags %}bg-{{ message.tags }}{% endif %}">
+            <strong class="me-auto text-white">Notificação</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %} 

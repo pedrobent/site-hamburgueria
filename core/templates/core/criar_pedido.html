@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Novo Pedido{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Novo Pedido</h3>
+                </div>
+                <div class="card-body">
+                    <form id="pedidoForm">
+                        <div class="mb-3">
+                            <label for="cliente" class="form-label">Nome do Cliente</label>
+                            <input type="text" class="form-control" id="cliente" name="cliente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mesa" class="form-label">Número da Mesa</label>
+                            <input type="text" class="form-control" id="mesa" name="mesa">
+                        </div>
+                        <div class="mb-3">
+                            <label for="itens" class="form-label">Itens do Pedido</label>
+                            <textarea class="form-control" id="itens" name="itens" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="valor_total" class="form-label">Valor Total</label>
+                            <input type="number" class="form-control" id="valor_total" name="valor_total" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="observacoes" class="form-label">Observações</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="2"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Criar Pedido</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmacaoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pedido Criado com Sucesso!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Número do Pedido: <span id="numeroPedido"></span></p>
+                <p>Cliente: <span id="nomeCliente"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.reload()">Novo Pedido</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#pedidoForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            cliente: $('#cliente').val(),
+            mesa: $('#mesa').val(),
+            itens: $('#itens').val(),
+            valor_total: $('#valor_total').val(),
+            observacoes: $('#observacoes').val()
+        };
+
+        $.ajax({
+            url: '/api/pedidos/',
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+                $('#numeroPedido').text(response.numero_pedido);
+                $('#nomeCliente').text(response.cliente);
+                $('#confirmacaoModal').modal('show');
+                $('#pedidoForm')[0].reset();
+            },
+            error: function(xhr) {
+                alert('Erro ao criar pedido. Por favor, tente novamente.');
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pedidos - Hamburgueria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --dark-color: #2d3436;
+            --light-color: #f8f9fa;
+        }
+
+        body { 
+            background-color: var(--light-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: var(--dark-color);
+            padding: 0.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            padding: 1rem;
+            max-width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .form-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1rem;
+            width: 100%;
+            align-items: start;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: white;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+            font-size: 1.2rem;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .form-control:hover {
+            border-color: var(--primary-color);
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: sticky;
+            bottom: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+            border-radius: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 1.2rem;
+        }
+
+        .form-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: var(--dark-color);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-icon {
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-size: 1.4rem;
+        }
+
+        #itens {
+            height: 300px;
+            resize: none;
+        }
+
+        #observacoes {
+            height: 100px;
+            resize: none;
+        }
+
+        /* Estilo para campos obrigatórios */
+        .form-control[required] {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Estilo para o campo de valor total */
+        #valor_total {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            letter-spacing: 0.5px;
+            height: 60px;
+        }
+
+        .keyboard-shortcut {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                <i class="fas fa-hamburger"></i> Sistema de Pedidos
+            </span>
+        </div>
+    </nav>
+
+    <div class="main-container container-fluid">
+        <div class="form-container">
+            <!-- Coluna da Esquerda -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="m-0">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Cliente e Valor
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form id="pedidoForm">
+                        {% csrf_token %}
+                        
+                        <div class="form-section">
+                            <div class="mb-4">
+                                <label for="cliente" class="form-label">
+                                    Nome do Cliente
+                                    <span class="keyboard-shortcut">[Alt+N]</span>
+                                </label>
+                                <input type="text" class="form-control" id="cliente" name="cliente" required accesskey="n">
+                            </div>
+                            <div class="mb-4">
+                                <label for="valor_total" class="form-label">
+                                    Valor Total (R$)
+                                    <span class="keyboard-shortcut">[Alt+V]</span>
+                                </label>
+                                <input type="number" class="form-control" id="valor_total" name="valor_total" step="0.01" required accesskey="v">
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Registrar Pedido [Alt+S]
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Coluna da Direita -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="m-0">
+                        <i class="fas fa-utensils me-2"></i>
+                        Detalhes do Pedido
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-section">
+                        <label for="itens" class="form-label">
+                            Itens do Pedido
+                            <span class="keyboard-shortcut">[Alt+I]</span>
+                        </label>
+                        <textarea class="form-control mb-4" id="itens" name="itens" required accesskey="i"
+                            placeholder="Ex: 1x Hambúrguer Clássico&#10;2x Batata Frita Grande&#10;1x Refrigerante 500ml"></textarea>
+
+                        <label for="observacoes" class="form-label">
+                            Observações
+                            <span class="keyboard-shortcut">[Alt+O]</span>
+                        </label>
+                        <textarea class="form-control" id="observacoes" name="observacoes" accesskey="o"
+                            placeholder="Ex: Sem cebola, hambúrguer bem passado..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-message alert alert-success alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-check-circle me-2"></i>
+            <div>
+                <strong>Pedido registrado com sucesso!</strong>
+                <br>
+                Número do pedido: <span id="numeroPedido" class="fw-bold"></span>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            $('#pedidoForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    cliente: $('#cliente').val(),
+                    itens: $('#itens').val(),
+                    valor_total: $('#valor_total').val(),
+                    observacoes: $('#observacoes').val()
+                };
+
+                $.ajax({
+                    url: '/api/pedidos/',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        $('#numeroPedido').text(response.numero_pedido);
+                        $('.success-message').fadeIn();
+                        $('#pedidoForm')[0].reset();
+                        $('#cliente').focus();
+                        
+                        setTimeout(function() {
+                            $('.success-message').fadeOut();
+                        }, 5000);
+                    },
+                    error: function(xhr) {
+                        console.error('Erro:', xhr.responseText);
+                        alert('Erro ao registrar pedido. Por favor, tente novamente.');
+                    }
+                });
+            });
+
+            // Formatar valor total
+            $('#valor_total').on('input', function() {
+                if (this.value) {
+                    this.value = parseFloat(this.value).toFixed(2);
+                }
+            });
+
+            // Atalhos de teclado
+            document.addEventListener('keydown', function(e) {
+                if (e.altKey && e.key === 's') {
+                    e.preventDefault();
+                    $('#pedidoForm').submit();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

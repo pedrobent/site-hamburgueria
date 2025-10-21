@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro de Cliente{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Cadastro de Cliente</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="id_nome" class="form-label">Nome</label>
+                                {{ form.nome }}
+                                <div class="invalid-feedback">
+                                    Por favor, informe seu nome.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_sobrenome" class="form-label">Sobrenome</label>
+                                {{ form.sobrenome }}
+                                <div class="invalid-feedback">
+                                    Por favor, informe seu sobrenome.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_telefone" class="form-label">Telefone</label>
+                            {{ form.telefone }}
+                            <div class="invalid-feedback">
+                                Por favor, informe um número de telefone válido.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">E-mail</label>
+                            {{ form.email }}
+                            <div class="invalid-feedback">
+                                Por favor, informe um e-mail válido.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_endereco" class="form-label">Endereço</label>
+                            {{ form.endereco }}
+                            <div class="invalid-feedback">
+                                Por favor, informe seu endereço.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Finalizar Cadastro
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validação do formulário
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+
+// Máscara para o telefone
+document.getElementById('id_telefone').addEventListener('input', function (e) {
+    var x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+    e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+</script>
+{% endblock %} 
