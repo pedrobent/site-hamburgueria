@@ -27,8 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.0.193', 'localhost', '127.0.0.1', '34.135.30.6']
 
-CSRF_TRUSTED_ORIGINS = ['34.135.30.6']
-
 
 # Application definition
 
@@ -121,7 +119,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'staticfiles/'
 
 # Configurações de Mídia
 MEDIA_URL = '/media/'
