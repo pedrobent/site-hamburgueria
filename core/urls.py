@@ -17,5 +17,5 @@ urlpatterns = [
     path('carrinho/finalizar/', finalizar_pedido, name='finalizar_pedido'),
     path('pedidos/', pedido_list, name='pedido_list'),
     path('criar-pedido/', criar_pedido, name='criar_pedido'),
-    path('', cadastro_cliente, name='cadastro_cliente'),
+    path('cadastro-cliente/', cadastro_cliente, name='cadastro_cliente'),
 ] 
