@@ -1,0 +1,75 @@
+###############################################################################
+# Replace
+# nusa to the name of the gunicorn file you want
+# pedro to your user name
+# app_repo to the folder name of your pedidos
+# pedidos to the folder name where you find a file called wsgi.py
+#
+###############################################################################
+# Criando o arquivo nusa.socket
+sudo nano /etc/systemd/system/nusa.socket
+
+###############################################################################
+# Conteúdo do arquivo
+[Unit]
+Description=gunicorn blog socket
+
+[Socket]
+ListenStream=/run/nusa.socket
+
+[Install]
+WantedBy=sockets.target
+
+###############################################################################
+# Criando o arquivo nusa.service
+sudo nano /etc/systemd/system/nusa.service
+
+###############################################################################
+# Conteúdo do arquivo
+[Unit]
+Description=Gunicorn daemon (You can change if you want)
+Requires=nusa.socket
+After=network.target
+
+[Service]
+User=pedro
+Group=www-data
+Restart=on-failure
+EnvironmentFile=/home/pedro/app_repo/.env
+WorkingDirectory=/home/pedro/app_repo
+# --error-logfile --enable-stdio-inheritance --log-level and --capture-output
+# are all for debugging purposes.
+ExecStart=/home/pedro/app_repo/venv/bin/gunicorn \
+          --error-logfile /home/pedro/app_repo/gunicorn-error-log \
+          --enable-stdio-inheritance \
+          --log-level "debug" \
+          --capture-output \
+          --access-logfile - \
+          --workers 6 \
+          --bind unix:/run/nusa.socket \
+          pedidos.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+###############################################################################
+# Ativando
+sudo systemctl start nusa.socket
+sudo systemctl enable nusa.socket
+
+# Checando
+sudo systemctl status nusa.socket
+curl --unix-socket /run/nusa.socket localhost
+sudo systemctl status nusa
+
+# Restarting
+sudo systemctl restart nusa.service
+sudo systemctl restart nusa.socket
+sudo systemctl restart nusa
+
+# After changing something
+sudo systemctl daemon-reload
+
+# Debugging
+sudo journalctl -u nusa.service
+sudo journalctl -u nusa.socket
