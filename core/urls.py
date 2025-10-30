@@ -11,7 +11,7 @@ router.register(r'pedidos', PedidoViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('lista de produtos/', lista_produtos, name='lista_produtos'),
+    path('', lista_produtos, name='lista_produtos'),
     path('carrinho/', ver_carrinho, name='ver_carrinho'),
     path('carrinho/adicionar/<int:produto_id>/', adicionar_ao_carrinho, name='adicionar_ao_carrinho'),
     path('carrinho/finalizar/', finalizar_pedido, name='finalizar_pedido'),
